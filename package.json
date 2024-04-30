@@ -1,0 +1,17 @@
+{
+  "name": "ohm",
+  "module": "src/index.ts",
+  "type": "module",
+  "devDependencies": {
+    "@biomejs/biome": "^1.7.1",
+    "@types/bun": "latest"
+  },
+  "peerDependencies": {
+    "typescript": "^5.0.0"
+  },
+  "dependencies": {
+    "discord.js": "^14.14.1",
+    "pino": "^9.0.0",
+    "pino-pretty": "^11.0.0"
+  }
+}

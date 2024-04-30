@@ -1,0 +1,59 @@
+{
+	"$schema": "https://biomejs.dev/schemas/1.5.3/schema.json",
+	"organizeImports": {
+		"enabled": false
+	},
+	"linter": {
+		"enabled": true,
+		"ignore": ["./public", "./build", "./dist"],
+		"rules": {
+			"recommended": true,
+			"complexity": {
+				"useLiteralKeys": "off"
+			},
+			"performance": {
+				"noDelete": "off"
+			},
+			"style": {
+				"useBlockStatements": "error",
+				"useNamingConvention": {
+					"level": "error",
+					"options": {
+						"strictCase": false
+					}
+				},
+				"useShorthandArrayType": "error",
+				"noImplicitBoolean": "error",
+				"noNegationElse": "error",
+				"useCollapsedElseIf": "error",
+				"useFilenamingConvention": {
+					"level": "error",
+					"options": {
+						"requireAscii": true,
+						"filenameCases": ["camelCase", "PascalCase"]
+					}
+				}
+			},
+			"suspicious": {
+				"noConsoleLog": "warn"
+			},
+			"correctness": {
+				"noUnusedImports": "error"
+			}
+		}
+	},
+	"formatter": {
+		"enabled": true,
+		"ignore": ["./public", "./build", "./dist"],
+		"indentStyle": "tab"
+	},
+	"javascript": {
+		"formatter": {
+			"quoteProperties": "preserve",
+			"trailingComma": "none",
+			"lineWidth": 192,
+			"indentStyle": "tab",
+			"bracketSameLine": true
+		}
+	}
+}

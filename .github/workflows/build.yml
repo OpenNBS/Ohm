@@ -1,0 +1,30 @@
+name: Build
+
+on:
+  push:
+    branches:
+    - main
+  workflow_dispatch:
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Set up Bun
+      uses: oven-sh/setup-bun@v1
+      with:
+        bun-version: latest
+
+    - name: Build
+      run: |
+        bun install --production --frozen-lockfile
+        bun build.ts
+
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: Binaries
+        path: build/*
