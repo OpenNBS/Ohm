@@ -8,6 +8,7 @@ import { log } from "../../log";
 const roleId = string("VERIFIED_ROLE");
 const minimumMessages = number("MINIMUM_MESSAGES");
 
+// TODO: Abstract this so it can be used for other roles
 let roleValid = false;
 for (const [_, guild] of client.guilds.cache) {
 	const roles = await guild.roles.fetch();

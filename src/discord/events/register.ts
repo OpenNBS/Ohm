@@ -5,6 +5,7 @@ import { log } from "../../log";
 const self = basename(__filename);
 const path = resolve(__dirname);
 
+// TODO: Abstract this so it can be used for other listeners (commands)
 export async function register() {
 	log.info("Registering all Discord listeners...");
 
