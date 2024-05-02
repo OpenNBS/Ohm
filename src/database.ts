@@ -49,9 +49,6 @@ export function getUser(id: string) {
 
 export function seeUser(id: string) {
 	const user = getUser(id);
-
-	console.log(user);
-
 	if (user?.verified) {
 		return {
 			"count": user.message_count,
