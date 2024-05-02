@@ -23,19 +23,19 @@ database
 		CREATE TABLE IF NOT EXISTS users (
 			id            TEXT    PRIMARY KEY,
 			message_count INTEGER DEFAULT 1,
-			last_seen     INTEGER DEFAULT 0,
+			last_seen     INTEGER,
 			verified      BOOLEAN DEFAULT FALSE
 		);
 	`)
 	.run();
 
 const query = {
-	"select": database.query("SELECT $id, message_count, last_seen, verified FROM users;"),
-	"update": database.query("UPDATE users SET last_seen = unixepoch(CURRENT_TIMESTAMP), message_count = $count WHERE ID = $id;"),
+	"select": database.query("SELECT message_count, last_seen, verified FROM users WHERE id = $id;"),
+	"update": database.query("UPDATE users SET last_seen = $timestamp, message_count = $count WHERE ID = $id;"),
 	"verify": database.query("UPDATE users SET verified = true WHERE ID = $id;"),
 	"create": database.query(`
-		INSERT INTO users (id)
-		VALUES ($id);
+		INSERT INTO users (id, last_seen)
+		VALUES ($id, $timestamp);
 	`)
 };
 
@@ -50,9 +50,21 @@ export function getUser(id: string) {
 export function seeUser(id: string) {
 	const user = getUser(id);
 
+	console.log(user);
+
+	if (user?.verified) {
+		return {
+			"count": user.message_count,
+			"verified": true
+		};
+	}
+
+	const now = Date.now();
+
 	if (!user) {
 		query.create.run({
-			"$id": id
+			"$id": id,
+			"$timestamp": now
 		});
 
 		return {
@@ -61,14 +73,7 @@ export function seeUser(id: string) {
 		};
 	}
 
-	if (user.verified) {
-		return {
-			"count": user.message_count,
-			"verified": true
-		};
-	}
-
-	if (Date.now() / 1000 - user.last_seen < messageCooldown) {
+	if ((now - user.last_seen) / 1000 < messageCooldown) {
 		log.debug("Message cooldown hit. Not updating...");
 		return;
 	}
@@ -77,6 +82,7 @@ export function seeUser(id: string) {
 
 	query.update.run({
 		"$id": id,
+		"$timestamp": now,
 		"$count": count
 	});
 
