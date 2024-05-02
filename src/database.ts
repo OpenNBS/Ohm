@@ -30,7 +30,7 @@ database
 	.run();
 
 const query = {
-	"select": database.query("SELECT message_count, last_seen, verified FROM users WHERE id = $id;"),
+	"select": database.query("SELECT id, message_count, last_seen, verified FROM users WHERE id = $id;"),
 	"update": database.query("UPDATE users SET last_seen = $timestamp, message_count = $count WHERE ID = $id;"),
 	"verify": database.query("UPDATE users SET verified = true WHERE ID = $id;"),
 	"create": database.query(`
