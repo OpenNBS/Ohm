@@ -68,11 +68,12 @@ export function seeUser(id: string) {
 		};
 	}
 
-	let count = user.message_count;
-	if (Date.now() / 1000 - user.last_seen > messageCooldown) {
-		log.debug("Message cooldown satisfied, incrementing count...");
-		count++;
+	if (Date.now() / 1000 - user.last_seen < messageCooldown) {
+		log.debug("Message cooldown hit. Not updating...");
+		return;
 	}
+
+	const count = user.message_count + 1;
 
 	query.update.run({
 		"$id": id,

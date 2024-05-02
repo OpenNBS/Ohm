@@ -44,15 +44,16 @@ if (!roleValid) {
 	throw "Role setup is not valid.";
 }
 
-client.on(Events.MessageCreate, (event) => {
+client.on(Events.MessageCreate, async (event) => {
 	log.debug(`New message creation event for user ${event.author.username}...`);
 	if (!event.member) {
 		return;
 	}
 
 	const user = seeUser(event.author.id);
-	if (user.verified) {
-		log.debug("Member has already been verified!");
+
+	if (!user || user.verified) {
+		log.debug("Nothing to do!");
 		return;
 	}
 
@@ -60,7 +61,18 @@ client.on(Events.MessageCreate, (event) => {
 	if (user.count > minimumMessages) {
 		log.debug("Verifying member...");
 		if (event.member.moderatable) {
-			event.member.roles.add(roleId);
+			await event.member.roles.add(roleId);
+
+			const currentMember = await event.guild?.members.fetch({
+				"user": event.author
+			});
+
+			if (!currentMember || currentMember.roles.cache.has(roleId)) {
+				log.warn(`Could not verify member ${event.member.displayName}! Not verifying yet.`);
+				return;
+			}
+		} else {
+			log.warn("Cannot verify member due to permissions.");
 		}
 
 		verifyUser(event.member.id);
