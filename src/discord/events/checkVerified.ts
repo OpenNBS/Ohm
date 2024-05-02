@@ -50,7 +50,7 @@ client.on(Events.MessageCreate, async (event) => {
 		return;
 	}
 
-	const user = seeUser(event.author.id);
+	const user = seeUser(event.member.id);
 
 	if (!user || user.verified) {
 		log.debug("Nothing to do!");
