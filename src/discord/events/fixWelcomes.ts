@@ -31,7 +31,7 @@ function isDuplicate(username: string) {
 			continue;
 		}
 
-		if ((now - joinMessage.timestamp) / 1000 < 3) {
+		if ((now - joinMessage.timestamp) / 1000 < 30) {
 			return true;
 		}
 	}
