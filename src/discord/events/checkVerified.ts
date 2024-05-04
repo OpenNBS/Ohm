@@ -4,6 +4,7 @@ import { client } from "../client";
 import { seeUser, verifyUser } from "../../database";
 import { number, string } from "../../util/env";
 import { log } from "../../log";
+import { isSystemMessage } from "../../util/message";
 
 const roleId = string("VERIFIED_ROLE");
 const minimumMessages = number("MINIMUM_MESSAGES");
@@ -44,13 +45,13 @@ if (!roleValid) {
 	throw "Role setup is not valid.";
 }
 
-client.on(Events.MessageCreate, async (event) => {
-	log.debug(`New message creation event for user ${event.author.username}...`);
-	if (!event.member) {
+client.on(Events.MessageCreate, async (message) => {
+	log.debug(`Checking verification status for ${message.author.username}...`);
+	if (!message.member || isSystemMessage(message)) {
 		return;
 	}
 
-	const user = seeUser(event.member.id);
+	const user = seeUser(message.member.id);
 
 	if (!user || user.verified) {
 		log.debug("Nothing to do!");
@@ -60,22 +61,22 @@ client.on(Events.MessageCreate, async (event) => {
 	log.debug(`Message count is ${user.count}.`);
 	if (user.count > minimumMessages) {
 		log.debug("Verifying member...");
-		if (event.member.moderatable) {
-			await event.member.roles.add(roleId);
+		if (message.member.moderatable) {
+			await message.member.roles.add(roleId);
 
-			const currentMember = await event.guild?.members.fetch({
-				"user": event.author
+			const currentMember = await message.guild?.members.fetch({
+				"user": message.author
 			});
 
 			if (!currentMember || currentMember.roles.cache.has(roleId)) {
-				log.warn(`Could not verify member ${event.member.displayName}! Not verifying yet.`);
+				log.warn(`Could not verify member ${message.member.displayName}! Not verifying yet.`);
 				return;
 			}
 		} else {
 			log.warn("Cannot verify member due to permissions.");
 		}
 
-		verifyUser(event.member.id);
+		verifyUser(message.member.id);
 		log.debug("Verified member!");
 	}
 });
