@@ -46,10 +46,11 @@ if (!roleValid) {
 }
 
 client.on(Events.MessageCreate, async (message) => {
-	log.debug(`Checking verification status for ${message.author.username}...`);
 	if (!message.member || isSystemMessage(message)) {
 		return;
 	}
+
+	log.debug(`Checking verification status for ${message.author.username}...`);
 
 	const user = seeUser(message.member.id);
 
