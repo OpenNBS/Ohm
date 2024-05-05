@@ -47,7 +47,8 @@ client.on(Events.MessageCreate, (message) => {
 	log.debug(`Join message for member ${message.author.displayName} detected.`);
 
 	if (isDuplicate(message.author.username)) {
-		log.debug("Is a duplicate!");
+		log.debug("..which is a duplicate!");
+		message.delete();
 	}
 
 	updateLast(message.author.username);
