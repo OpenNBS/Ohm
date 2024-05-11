@@ -5,7 +5,7 @@ import { string } from "../util/env";
 log.info("Creating Discord client...");
 
 export const client = new Client({
-	"intents": [GatewayIntentBits.MessageContent, GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.GuildMembers]
+	"intents": [GatewayIntentBits.MessageContent, GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.GuildMembers, GatewayIntentBits.AutoModerationExecution]
 });
 
 const success = !!(await client.login(string("DISCORD_TOKEN")));
