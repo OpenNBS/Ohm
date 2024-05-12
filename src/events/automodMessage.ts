@@ -1,10 +1,10 @@
 import type { Channel, User } from "discord.js";
 import { Events } from "discord.js";
 import { sleep } from "bun";
-import { client } from "../client";
-import { number, string } from "../../util/env";
-import { getUser } from "../../database";
-import { log } from "../../log";
+import { client } from "~/client";
+import { number, string } from "~/util/env";
+import { getUser } from "~/database";
+import { log } from "~/log";
 
 const ruleId = string("AUTOMOD_RULE_ID");
 const minimumMessages = number("MINIMUM_MESSAGES");

@@ -1,6 +1,6 @@
 import { Database } from "bun:sqlite";
-import { log } from "./log";
-import { number } from "./util/env";
+import { number } from "~/util/env";
+import { log } from "~/log";
 
 interface User {
 	"id": number;

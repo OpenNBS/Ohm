@@ -1,10 +1,10 @@
 import type { Role } from "discord.js";
 import { Events } from "discord.js";
-import { client } from "../client";
-import { seeUser, verifyUser } from "../../database";
-import { number, string } from "../../util/env";
-import { log } from "../../log";
-import { isSystemMessage } from "../../util/message";
+import { client } from "~/client";
+import { isSystemMessage } from "~/util/message";
+import { seeUser, verifyUser } from "~/database";
+import { number, string } from "~/util/env";
+import { log } from "~/log";
 
 const roleId = string("VERIFIED_ROLE");
 const minimumMessages = number("MINIMUM_MESSAGES");

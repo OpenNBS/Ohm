@@ -1,5 +1,5 @@
 import { Events } from "discord.js";
-import { client } from "../client";
+import { client } from "../../client";
 import { log } from "../../log";
 import { isJoinMessage } from "../../util/message";
 

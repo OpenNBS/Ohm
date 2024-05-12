@@ -1,3 +1,3 @@
-import { register } from "./discord/events/register";
+import { register } from "~/events/register";
 
 await register();

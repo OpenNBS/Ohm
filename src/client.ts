@@ -1,6 +1,6 @@
 import { Client, GatewayIntentBits } from "discord.js";
-import { log } from "../log";
-import { string } from "../util/env";
+import { string } from "~/util/env";
+import { log } from "~/log";
 
 log.info("Creating Discord client...");
 
