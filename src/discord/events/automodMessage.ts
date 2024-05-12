@@ -2,20 +2,39 @@ import type { Channel, User } from "discord.js";
 import { Events } from "discord.js";
 import { sleep } from "bun";
 import { client } from "../client";
-import { string } from "../../util/env";
+import { number, string } from "../../util/env";
+import { getUser } from "../../database";
 import { log } from "../../log";
 
 const ruleId = string("AUTOMOD_RULE_ID");
-const blockedReason = "To prevent spam, links are blocked until you're verified! You'll be verified in a few messages :)";
+const minimumMessages = number("MINIMUM_MESSAGES");
 
-function getReason(user?: User) {
-	let reason = blockedReason;
+function formatReason(mention?: string, messages?: number) {
+	let base = "prevent spam, links are blocked until you're verified.";
 
-	if (user) {
-		reason = `<@${user.id}>, ${reason}`;
+	if (mention) {
+		base = `${mention}, to ${base}`;
+	} else {
+		base = `To ${base}`;
 	}
 
-	return reason;
+	if (messages !== undefined) {
+		base += ` ${messages} ${messages > 1 ? "messages" : "message"} to go!`;
+	}
+
+	return base;
+}
+
+function getReason(user?: User, toMention = false) {
+	const mention = toMention && user ? `<@${user.id}>` : undefined;
+	let messages: number | undefined;
+
+	if (user) {
+		const databaseUser = getUser(user.id);
+		messages = minimumMessages - (databaseUser?.message_count ?? 0);
+	}
+
+	return formatReason(mention, messages);
 }
 
 async function sendMessage(channel: Channel | null, reason: string) {
@@ -40,13 +59,13 @@ client.on(Events.AutoModerationActionExecution, async (action) => {
 	if (!action.user) {
 		log.debug("User is not defined.");
 
-		await sendMessage(action.channel, blockedReason);
+		await sendMessage(action.channel, getReason());
 		return;
 	}
 
 	let success: boolean;
 	try {
-		await action.user.send(blockedReason);
+		await action.user.send(getReason(action.user));
 		success = true;
 
 		log.debug("Sent blocked reason in DM!");
@@ -55,6 +74,6 @@ client.on(Events.AutoModerationActionExecution, async (action) => {
 	}
 
 	if (!success) {
-		await sendMessage(action.channel, getReason(action.user));
+		await sendMessage(action.channel, getReason(action.user, true));
 	}
 });
