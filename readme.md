@@ -8,5 +8,5 @@ Simple Discord bot that provides utility and moderation functions for the [OpenN
 4. To start the bot, run `bun .`!
 
 > [!IMPORTANT]
-> Don't forget to configure your environment!
+> Don't forget to configure your environment!  
 > Copy `.env` to `.env.local` and fill it out.
