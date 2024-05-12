@@ -1,6 +1,6 @@
 import { opendir } from "node:fs/promises";
 import { basename, resolve, join } from "node:path";
-import { log } from "../../log";
+import { log } from "~/log";
 
 const self = basename(__filename);
 const path = resolve(__dirname);
