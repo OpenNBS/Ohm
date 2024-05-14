@@ -22,6 +22,8 @@ function formatReason(mention?: string, messages?: number) {
 		base += ` ${messages} ${messages > 1 ? "messages" : "message"} to go!`;
 	}
 
+	log.debug(`"${base}"`);
+
 	return base;
 }
 
