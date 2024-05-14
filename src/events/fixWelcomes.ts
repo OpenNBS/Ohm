@@ -1,7 +1,7 @@
 import { Events } from "discord.js";
 import { client } from "~/client";
-import { log } from "~/log";
 import { isJoinMessage } from "~/util/message";
+import { log } from "~/log";
 
 interface JoinMessage {
 	"username": string;
@@ -31,7 +31,11 @@ function isDuplicate(username: string) {
 			continue;
 		}
 
-		if ((now - joinMessage.timestamp) / 1000 < 30) {
+		const difference = (now - joinMessage.timestamp) / 1000;
+
+		log.debug(`Join message time difference is "${difference}".`);
+
+		if (difference < 30) {
 			return true;
 		}
 	}
@@ -47,7 +51,7 @@ client.on(Events.MessageCreate, (message) => {
 	log.debug(`Join message for member ${message.author.displayName} detected.`);
 
 	if (isDuplicate(message.author.username)) {
-		log.debug("..which is a duplicate!");
+		log.debug("...which is a duplicate!");
 		message.delete();
 	}
 
