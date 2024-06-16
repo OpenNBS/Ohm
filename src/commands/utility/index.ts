@@ -5,4 +5,5 @@ export const meta: CategoryMeta = {
 	"description": "Various non-categorized utilities for niche purposes."
 }
 
+export * as mock from "./mock";
 export * as ping from "./ping";
