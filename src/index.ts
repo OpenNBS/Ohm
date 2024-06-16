@@ -1,3 +1,3 @@
-import { register } from "~/events/register";
-
-await register();
+import "~/client";
+import "~/events";
+import "~/commands";
