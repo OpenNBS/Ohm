@@ -1,12 +1,13 @@
+import type { ApplicationCommandDataResolvable } from "discord.js";
+
 export type Permission = "member" | "moderator" | "administrator";
 
 export interface CommandMeta {
-	"label": string,
-	"description"?: string,
-	"permission": Permission
+	"builder": ApplicationCommandDataResolvable;
+	"permission": Permission;
 }
 
 export interface CategoryMeta {
-	"label": string,
-	"description"?: string
+	"label": string;
+	"description"?: string;
 }

@@ -2,8 +2,10 @@ import type { CommandInteraction } from "discord.js";
 import type { CommandMeta } from "~/types/Command.ts";
 
 export const meta: CommandMeta = {
-	"label": "Ping",
-	"description": "Checks the latency between the bot and Discord's servers.",
+	"builder": {
+		"name": "ping",
+		"description": "Checks the latency between the bot and Discord's servers."
+	},
 	"permission": "member"
 };
 
