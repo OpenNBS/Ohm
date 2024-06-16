@@ -1,18 +1,16 @@
 {
 	"type": "module",
-	"name": "ohm",
-	"description": "Utility and moderation bot for the OpenNBS community.",
 	"module": "src/index.ts",
 	"devDependencies": {
-		"@biomejs/biome": "^1.7.1",
+		"@biomejs/biome": "^1.8.1",
 		"@types/bun": "latest"
 	},
 	"peerDependencies": {
-		"typescript": "^5.0.0"
+		"typescript": "^5.4.5"
 	},
 	"dependencies": {
-		"discord.js": "^14.14.1",
-		"pino": "^9.0.0",
-		"pino-pretty": "^11.0.0"
+		"discord.js": "^14.15.3",
+		"pino": "^9.2.0",
+		"pino-pretty": "^11.2.1"
 	}
 }

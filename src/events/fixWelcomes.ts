@@ -1,7 +1,8 @@
 import { Events } from "discord.js";
 import { client } from "~/client";
-import { isJoinMessage } from "~/util/message";
 import { log } from "~/log";
+import { isJoinMessage } from "~/util/message";
+import { hasPermissions } from "~/util/role.ts";
 
 interface JoinMessage {
 	"username": string;
@@ -43,16 +44,18 @@ function isDuplicate(username: string) {
 	return false;
 }
 
-client.on(Events.MessageCreate, (message) => {
+await hasPermissions("ManageMessages");
+client.on(Events.MessageCreate, async (message) => {
 	if (!isJoinMessage(message)) {
 		return;
 	}
 
-	log.debug(`Join message for member ${message.author.displayName} detected.`);
+	log.debug(`Detected join message for "${message.author.displayName}"`);
 
 	if (isDuplicate(message.author.username)) {
-		log.debug("...which is a duplicate!");
-		message.delete();
+		log.info(`Deleted a duplicate join message for ${message.author.username}!`);
+
+		await message.delete();
 	}
 
 	updateLast(message.author.username);

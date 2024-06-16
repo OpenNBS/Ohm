@@ -2,6 +2,7 @@ import { Events } from "discord.js";
 import { client } from "~/client";
 import { log } from "~/log";
 import { string } from "~/util/env";
+import { hasPermissions, validateRoles } from "~/util/role.ts";
 
 const roles = {
 	"supporter": string("SUPPORTER_ROLE"),
@@ -9,7 +10,9 @@ const roles = {
 	"booster": string("BOOSTER_ROLE")
 };
 
-client.on(Events.GuildMemberUpdate, (old, current) => {
+await validateRoles(...Object.values(roles));
+await hasPermissions("ManageRoles");
+client.on(Events.GuildMemberUpdate, async (old, current) => {
 	const hadSupporter = old.roles.cache.has(roles.supporter);
 	const hasSupporter = current.roles.cache.has(roles.supporter);
 	if (hadSupporter !== hasSupporter) {
@@ -17,9 +20,8 @@ client.on(Events.GuildMemberUpdate, (old, current) => {
 	}
 
 	const hadDonator = old.roles.cache.has(roles.donator);
-	const hasDonator = current.roles.cache.has(roles.donator);
-
 	const hadBooster = old.roles.cache.has(roles.booster);
+	const hasDonator = current.roles.cache.has(roles.donator);
 	const hasBooster = current.roles.cache.has(roles.booster);
 
 	log.debug(`Roles updated for ${current.displayName}.`);
@@ -34,13 +36,13 @@ client.on(Events.GuildMemberUpdate, (old, current) => {
 	if ((!hadDonator && hasDonator) || (!hadBooster && hasBooster)) {
 		log.debug("Adding the supporter role!");
 
-		current.roles.add(roles.supporter);
+		await current.roles.add(roles.supporter);
 		return;
 	}
 
 	if (hadBooster && !hasBooster) {
 		log.debug("Removing the supporter role!");
 
-		current.roles.remove(roles.supporter);
+		await current.roles.remove(roles.supporter);
 	}
 });
