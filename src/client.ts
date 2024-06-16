@@ -22,7 +22,7 @@ export const guild = await client.guilds.fetch(string("GUILD_ID"));
 
 log.debug("Finding managed role...");
 let foundManagedRole: Role | undefined;
-for (const [id, role] of guild.roles.cache) {
+for (const [_, role] of guild.roles.cache) {
 	if (role.name !== username) {
 		continue;
 	}

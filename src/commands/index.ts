@@ -32,12 +32,11 @@ for (const [categoryKey, { meta, ...commands }] of Object.entries(categories)) {
 			"runner": run
 		};
 
-		/* TODO: only do this when required
+		// TODO: only do this when required
 		await guild.commands.create({
 			"name": commandKey,
-			"description": meta.description
+			"description": meta.description ?? ""
 		});
-		 */
 	}
 
 	log.info(`Registered ${meta.label.toLocaleLowerCase()} commands!`);
