@@ -1,9 +1,9 @@
-import { Database } from "bun:sqlite";
-import { number } from "~/util/env";
-import { log } from "~/log";
+import { database } from "~/database/client.ts";
+import { log } from "~/log.ts";
+import { number } from "~/util/env.ts";
 
 interface User {
-	"id": number;
+	"id": string;
 	// biome-ignore lint/style/useNamingConvention: SQLite convention is in snake_case
 	"message_count": number;
 	// biome-ignore lint/style/useNamingConvention: SQLite convention is in snake_case
@@ -13,11 +13,6 @@ interface User {
 
 const messageCooldown = number("MESSAGE_COOLDOWN");
 
-const database = new Database("db.sqlite", {
-	"create": true
-});
-
-database.exec("PRAGMA journal_mode = WAL;");
 database
 	.query(`
 		CREATE TABLE IF NOT EXISTS users (
@@ -33,6 +28,7 @@ const query = {
 	"select": database.query("SELECT id, message_count, last_seen, verified FROM users WHERE id = $id;"),
 	"update": database.query("UPDATE users SET last_seen = $timestamp, message_count = $count WHERE ID = $id;"),
 	"verify": database.query("UPDATE users SET verified = true WHERE ID = $id;"),
+	"reset": database.query("UPDATE users SET verified = true, message_count = 0 WHERE ID = $id;"),
 	"create": database.query(`
 		INSERT INTO users (id, last_seen)
 		VALUES ($id, $timestamp);
@@ -40,6 +36,7 @@ const query = {
 };
 
 export function getUser(id: string) {
+	log.debug(`Running user get query against user ID "${id}"...`);
 	const result = query.select.get({
 		"$id": id
 	});
@@ -59,6 +56,7 @@ export function seeUser(id: string) {
 	const now = Date.now();
 
 	if (!user) {
+		log.debug(`Running user creation query with user ID "${id}"...`);
 		query.create.run({
 			"$id": id,
 			"$timestamp": now
@@ -77,6 +75,7 @@ export function seeUser(id: string) {
 
 	const count = user.message_count + 1;
 
+	log.debug(`Running user update query against user ID "${id}"...`);
 	query.update.run({
 		"$id": id,
 		"$timestamp": now,
@@ -90,7 +89,15 @@ export function seeUser(id: string) {
 }
 
 export function verifyUser(id: string) {
+	log.debug(`Running user verify query against user ID "${id}"...`);
 	query.verify.run({
+		"$id": id
+	});
+}
+
+export function resetUser(id: string) {
+	log.debug(`Running user reset query against user ID "${id}"...`);
+	query.reset.run({
 		"$id": id
 	});
 }
