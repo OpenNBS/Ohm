@@ -1,8 +1,8 @@
 import { Events } from "discord.js";
 import { client } from "~/client";
+import { hasPermissions } from "~/helpers/role.ts";
 import { log } from "~/log";
 import { isJoinMessage } from "~/util/message";
-import { hasPermissions } from "~/util/role.ts";
 
 interface JoinMessage {
 	"username": string;

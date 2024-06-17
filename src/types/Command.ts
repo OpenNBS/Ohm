@@ -1,10 +1,11 @@
-import type { ApplicationCommandDataResolvable } from "discord.js";
+import type { ApplicationCommandDataResolvable, ChatInputCommandInteraction } from "discord.js";
 
 export type Permission = "member" | "moderator" | "administrator";
 
 export interface CommandMeta {
-	"builder": ApplicationCommandDataResolvable;
 	"permission": Permission;
+	"builder": ApplicationCommandDataResolvable;
+	"run": (interaction: ChatInputCommandInteraction) => void | Promise<void>;
 }
 
 export interface CategoryMeta {

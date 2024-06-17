@@ -21,7 +21,7 @@ const moderatorRole = string("MODERATOR_ROLE");
 for (const [categoryKey, { meta, ...commands }] of Object.entries(categories)) {
 	log.debug(`Registering commands in category "${categoryKey}"...`);
 
-	for (const [commandKey, { meta, run }] of Object.entries(commands)) {
+	for (const [commandKey, { permission, builder, run }] of Object.entries(commands)) {
 		log.debug(`Registering command "${commandKey}"...`);
 
 		if (handlers[commandKey]) {
@@ -29,12 +29,12 @@ for (const [categoryKey, { meta, ...commands }] of Object.entries(categories)) {
 		}
 
 		handlers[commandKey] = {
-			"permission": meta.permission as Permission,
+			"permission": permission as Permission,
 			"runner": run
 		};
 
 		// TODO: only do this when required
-		await guild.commands.create(meta.builder);
+		await guild.commands.create(builder);
 	}
 
 	log.info(`Registered ${meta.label.toLocaleLowerCase()} commands!`);
@@ -54,7 +54,7 @@ client.on(Events.InteractionCreate, async (interaction) => {
 		return;
 	}
 
-	if (handler.permission || handler.permission !== "member") {
+	if (handler.permission !== "member") {
 		log.debug(`Checking permissions for member ${interaction.user.username}...`);
 
 		const member = await guild.members.fetch(interaction.user.id);

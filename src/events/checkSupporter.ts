@@ -1,8 +1,8 @@
 import { Events } from "discord.js";
 import { client } from "~/client";
+import { hasPermissions, validateRoles } from "~/helpers/role.ts";
 import { log } from "~/log";
 import { string } from "~/util/env";
-import { hasPermissions, validateRoles } from "~/util/role.ts";
 
 const roles = {
 	"supporter": string("SUPPORTER_ROLE"),
