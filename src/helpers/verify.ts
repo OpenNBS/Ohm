@@ -38,7 +38,6 @@ export async function wrapCommand(interaction: ChatInputCommandInteraction, toVe
 	const success = await manageVerification(member, toVerify);
 
 	await interaction.reply({
-		"content": success ? "Successfully managed member's verification status!" : "Something went wrong... Check the logs!",
-		"ephemeral": true
+		"content": success ? "Successfully managed member's verification status!" : "Something went wrong... Check the logs!"
 	});
 }
