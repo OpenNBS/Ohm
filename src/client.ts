@@ -19,10 +19,11 @@ log.info(`Logged in under username "${username}".`);
 log.debug("Fetching primary guild...");
 await client.guilds.fetch();
 export const guild = await client.guilds.fetch(string("GUILD_ID"));
+const guildRoles = await guild.roles.fetch();
 
 log.debug("Finding managed role...");
 let foundManagedRole: Role | undefined;
-for (const [_, role] of guild.roles.cache) {
+for (const [_, role] of guildRoles) {
 	if (role.name !== username) {
 		continue;
 	}
