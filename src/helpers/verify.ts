@@ -10,7 +10,7 @@ await validateRoles(verifiedRole);
 await hasPermissions("ManageRoles");
 
 export async function manageVerification(member: GuildMember, toVerify: boolean) {
-	if (!member.moderatable) {
+	if (!member.manageable) {
 		log.warn(`Cannot manage member's verification status ("${member.user.username}") due to permissions!`);
 		return false;
 	}
